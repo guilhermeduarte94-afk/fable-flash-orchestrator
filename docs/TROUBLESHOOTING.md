@@ -1,58 +1,53 @@
 # Troubleshooting
 
-## The skill is missing
+## The skill is missing in Claude Code
 
-Check that installation ended with `Installed` or `Already installed`, not only a successful dry run. The expected file is `~/.agents/skills/astra-flash-orchestrator/SKILL.md`. Fully quit/reopen the host app, then start an Astra session. Check custom home locations and client skill discovery before reinstalling.
+Check that `python -B install.py --apply` ended with `Installed`, not only a
+dry run. The expected file is `~/.claude/skills/fable-flash-orchestrator/SKILL.md`.
+Fully restart Claude Code. If you use a custom `CLAUDE_CONFIG_DIR`, pass the
+matching `--home`.
 
-## Expected worker route is missing or different
+## doctor.py: DEEPSEEK_API_KEY is not set
 
-The direct default is `deepseek/deepseek-v4.1-flash`. A new alternate-provider
-install requires the exact documented `--worker-route`. An installed doctor or
-later update reuses the valid generated routing binding automatically; a doctor
-run from a fresh source checkout needs the option again. Establish the
-Router/provider configuration using the Router's own documentation first. An
-entry in a model catalog alone does not establish credentials or paid inference
-access. The installer does not auto-detect or silently substitute a provider.
+Export it in the shell that launches Claude Code (on Windows: user environment
+variable, or `setx DEEPSEEK_API_KEY ...` then a full restart of the app). The
+desktop app inherits the environment of the process that started it. Never
+paste the key into chat.
 
-Enter API keys yourself through the Router's private local prompt; never paste
-one into assistant chat. If the route is absent, stop package installation and
-finish provider setup separately.
+## doctor.py: Claude Code CLI not found
 
-## Router URL is rejected
+Set `FABLE_FLASH_CLAUDE_BIN` to the binary, or install the CLI with
+`npm install -g @anthropic-ai/claude-code`. On Windows the desktop app's copy
+under `%APPDATA%\Claude\claude-code\<version>\claude.exe` is detected
+automatically.
 
-Only HTTP(S) loopback URLs are accepted. Supported paths are `/v1` and `/_codex-router/<capability>/v1`, optionally with a trailing slash. Remote endpoints, queries, fragments and embedded URL credentials are rejected. Do not post a private capability URL in an issue.
+## doctor.py --check-api: HTTP 401/402
 
-## Static doctor passes but live catalog check fails
+The key is wrong or the DeepSeek account has no balance. The check is a free
+catalog GET; fix the account, then rerun.
 
-The optional doctor request deliberately does not read authentication files or send credentials. A Router requiring authentication may reject `/models`; a stopped Router or network restriction may also cause failure. Normal Codex requests can use an authenticated route. Keep authentication enabled and use the Router's documented diagnostic tools. Report only redacted HTTP status/error categories.
+## Worker exits immediately, `.run.json` has `is_error: true`
 
-## The offline HTTP fixture cannot bind a port
+Read `stderr_tail` in `.run.json` and the first lines of `.stream.jsonl`.
+Common causes: an unsupported CLI flag after a Claude Code update (run
+`run_worker.py --dry-run` and try the printed command by hand), a network
+block on `api.deepseek.com`, or `--max-budget-usd` set too low.
 
-One test starts a temporary local HTTP server. A restrictive sandbox can block it. Run the offline suite in an environment that permits a loopback fixture through the normal approval mechanism. Do not disable security controls or skip the failed test and call the suite passing.
+## Worker finished but the report says STATUS: failed and `report_written_by: run_worker`
 
-## Custom role is unavailable in a new session
+The worker hit `--max-turns` or stopped without writing its report. The final
+message is copied into the report. Raise the turn budget or split the bundle.
 
-The installed client must support standalone personal agent TOML files and expose native delegation. Files on disk do not prove the running tool supports them. Check your installed client and project/managed overrides. Do not fall back to a different model or external agent CLI.
+## The worker seems to use an Anthropic model
 
-## Existing skill or role conflicts
+Check `.run.json`: `base_url` must be `https://api.deepseek.com/anthropic` and
+`model_observed` a DeepSeek model. `worker_env.py` strips every `ANTHROPIC_*`
+and `CLAUDE_*` variable from the parent and sets an isolated config dir, so an
+Anthropic model there means the CLI ignored `ANTHROPIC_BASE_URL`; report the CLI
+version.
 
-The installer refuses symlinked targets, duplicate skill locations and differing package-owned files. Review existing content before using `--replace`; keep the resulting receipt. Do not remove unrelated skills to resolve discovery.
+## Permission denied inside the worker
 
-## Undo refuses because a file changed
-
-This protects later edits, including changes to the shared personal AGENTS file. Preserve those edits, compare the receipt and backup locally, then reconcile deliberately. Do not publish receipts or original instruction backups.
-
-## No savings or quality guarantee
-
-Provider usage and real task outcomes determine cost and quality. Offline tests validate installation and planning helpers, not the performance of either model. Request metadata is routing evidence; a worker's self-description is not.
-
-## Flash is visible in the picker but unavailable for delegation
-
-The merged catalog must advertise the exact selected route with
-`multi_agent_version: "v2"`. A model entry or default-subagent setting alone is
-insufficient. Use the installed Router's documented selection and catalog
-publication controls, then fully quit/reopen the app. Do not let an installation
-assistant run `subagents certify`, `test-model --live`, a smoke test or another
-paid probe to make this check pass. Decide separately whether to spend provider
-credit on certification yourself. Do not manually falsify certification records
-or claim selection proves runtime capability.
+The worker runs with `--permission-prompts none`: any tool outside
+`--allowed-tools` is denied, not asked. Widen the list per task, or narrow it
+with patterns such as `"Bash(npm test:*)"`.

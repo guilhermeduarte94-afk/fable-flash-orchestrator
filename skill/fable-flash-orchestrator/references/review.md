@@ -1,4 +1,4 @@
-# Astra's acceptance gate
+# Fable's acceptance gate
 
 Treat the worker report as a claim requiring evidence. Review the actual changed
 files relative to the task's captured baseline, including new untracked files.
@@ -21,11 +21,11 @@ weakened types, and unwanted dependencies or configuration changes. Match existi
 repository conventions without demanding a gratuitous rewrite. Review all changed
 code for the current task; do not paste the whole patch into chat as a ritual.
 
-Apply both lenses in one batched Astra review of the patch and evidence. They are
+Apply both lenses in one batched Fable review of the patch and evidence. They are
 not a requirement for two tool loops or two more agents. An independent reviewer
 may be useful for high-risk work only when its model and permissions are explicitly
-selected and its cost is justified. With Flash configured globally as the child
-default, an ordinary unnamed reviewer will not automatically be Astra.
+selected and its cost is justified. With DeepSeek configured globally as the child
+default, an ordinary unnamed reviewer will not automatically be Fable.
 
 ## Verify and decide
 
@@ -37,7 +37,7 @@ suite or repeat browser QA as a ritual. For environment-blocked checks, record
 exactly what wasn't verified. Do not claim acceptance of a requirement whose
 verification is missing.
 
-The valid outcomes are accepted, changes requested, or blocked. Only Astra assigns
+The valid outcomes are accepted, changes requested, or blocked. Only Fable assigns
 accepted. Return all file-specific findings and expected corrections in one request
 to the same worker. Re-review the affected fixes and run phase-level integration
 checks only at a genuine integration boundary. One correction cycle is the default;

@@ -1,13 +1,13 @@
 # Execution and workspace ownership
 
-## Default: one native writer, no extra harness
+## Default: one writer, no extra harness
 
-The default is one native Flash child in the current workspace for one coherent
-end-to-end phase bundle. Astra supplies the contract, dispatches once, waits, and
+The default is one DeepSeek worker process in the current workspace for one coherent
+end-to-end phase bundle. Fable supplies the contract, dispatches once, waits, and
 reviews one completion report. The worker owns in-scope repository discovery,
-implementation, tests, debugging, and routine browser/visual QA. This avoids a
-second CLI process, environment-variable command string, automatic commits, and
-accidental provider bypass. No `FLASH_WORKER_CMD` or external run_worker.sh is needed.
+implementation, tests, debugging, and routine browser/visual QA. The worker is one
+`run_worker.py` process per bundle; Fable never runs a second interactive CLI,
+never auto-commits, and never bypasses the provider routing that script enforces.
 
 Before editing, capture the workspace root, current branch/HEAD when Git exists,
 tracked/staged diff and untracked-file inventory. Preserve relevant pre-existing
@@ -22,21 +22,21 @@ changes are visible and must be preserved. With a Git worktree made from HEAD,
 uncommitted changes from the parent are NOT present. Inspect the resulting files;
 do not rely on a statement that contracts were "shared."
 
-Astra does not make overlapping changes while the worker owns paths. The worker
+Fable does not make overlapping changes while the worker owns paths. The worker
 does not mutate shared planning/status files assigned to the coordinator. Give
 its task report a unique output path. Do not conflate role instructions with
 hard filesystem access controls: inherited host permissions remain authoritative.
 
 ## Optional: two genuinely independent writers
 
-Parallelism is opt-in per plan. Use at most two Flash writers by default, and only
+Parallelism is opt-in per plan. Use at most two DeepSeek writers by default, and only
 when their dependencies are satisfied, writable scopes do not overlap, and
-separate workspaces are actually available. A separate agent thread alone does
+separate workspaces are actually available. A separate worker process alone does
 not satisfy workspace isolation. Shared types, dependency manifests/lockfiles,
 routes, migrations, generated outputs, and schema files are usually contention
 points; serialize them.
 
-For Git worktrees, Astra establishes a known base and records it PER TASK in the
+For Git worktrees, Fable establishes a known base and records it PER TASK in the
 plan/report, not via shared `git config`. Honor the project's Git permissions.
 Do not silently commit a dirty base to make worktree creation convenient. Prepare
 local dependencies through the project's approved setup, with test-only data and
@@ -58,10 +58,10 @@ Capture progress at meaningful resumable boundaries, not every tool call. Where 
 host turn limit interrupts it, resume the same task with its checkpoint; do not
 promise that any model or harness can run indefinitely.
 
-Use native wait/message/continuation functions as actually exposed. Choose the
-longest practical wait. Do not use repeated list/status calls as heartbeats, request
+Wait on the `run_worker.py` process (long Bash timeout or background run with
+its completion notification). Resume the same session id for corrections. Do not use repeated list/status calls as heartbeats, request
 play-by-play updates, interrupt a healthy run, or duplicate its repository work.
-A wait timeout alone is not a blocker. When a worker is genuinely blocked, Astra
+A wait timeout alone is not a blocker. When a worker is genuinely blocked, Fable
 resolves the contract or environment question and sends one targeted update. For
 rejected work, batch all concrete findings and send one correction request to the
 same child. Default to one correction cycle. Recheck only the affected behavior and
@@ -72,4 +72,4 @@ accepted dependencies; broaden further only for a material high-assurance risk.
 No automatic commits, staging, branch merges, pushing, deployment, publishing,
 or production migrations are included in this workflow. Execute such operations
 only under the user's applicable authorization and after actual review. A build
-request by itself is not a reason to edit global router settings mid-project.
+request by itself is not a reason to edit worker routing settings mid-project.

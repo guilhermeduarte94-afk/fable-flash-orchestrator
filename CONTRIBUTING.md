@@ -1,19 +1,26 @@
 # Contributing
 
-Keep changes focused on the native Astra/Flash workflow, installation reliability, useful task contracts and review evidence. Preserve the user's root model, existing Router and security boundaries.
+Keep changes focused on the Fable → DeepSeek workflow, worker isolation, useful
+task contracts and review evidence. Preserve the user's root model, credentials
+and security boundaries.
 
-Use Python 3.11+ with no third-party runtime dependencies. Run from the repository root:
+Use Python 3.11+ with no third-party runtime dependencies. Run from the
+repository root:
 
 ```sh
-python3 -B -m unittest discover -s tests -v
-python3 -B skill/astra-flash-orchestrator/scripts/validate_plan.py examples/invoice-filter/plan.json
-python3 -B scripts/release.py --check
+python -B -m unittest discover -s tests -v
+python -B skill/fable-flash-orchestrator/scripts/validate_plan.py examples/invoice-filter/plan.json
+DEEPSEEK_API_KEY=placeholder python -B skill/fable-flash-orchestrator/scripts/run_worker.py \
+  --task-id T1 --brief examples/invoice-filter/tasks/T1.md --cwd . --report /tmp/T1.md --dry-run
 ```
 
-Tests use temporary synthetic homes and a loopback HTTP fixture. Do not run `install.py --apply` against your real home just to test a contribution. Never add paid inference to tests or CI.
+Tests use a stub CLI and temporary homes; they never contact a network service.
+Do not run `install.py --apply` against your real home just to test a
+contribution. Never add paid inference to tests or CI.
 
-For behavior changes, add meaningful regression tests. Explain the problem, resulting behavior, checks actually run and limitations. Test supported Python versions when changing syntax or standard-library behavior. Real-client/provider checks must be labeled separately from offline tests.
+For behavior changes, add regression tests. When Claude Code changes a CLI flag
+used by `run_worker.py`, update the flag, the README's verified version and the
+troubleshooting entry together.
 
-Do not commit credentials, local catalogs, generated routing bindings, receipts, backups, private logs or personal configuration. New sources require attribution and compatible licensing. User data and private task context must not be included in examples.
-
-After changing distributable files, regenerate the inventory with `python3 -B scripts/release.py`, inspect its diff, then run `--check`. The release archive is built from a narrow file selection, not the entire working directory.
+Do not commit credentials, `.fable-flash-worker/` folders, stream logs,
+receipts or personal configuration.

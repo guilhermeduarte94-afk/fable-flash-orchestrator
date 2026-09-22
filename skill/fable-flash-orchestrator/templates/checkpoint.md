@@ -3,13 +3,13 @@
 Goal and scope: <current agreed result>
 Spec / plan: <paths>
 Current workspace and baseline: <path, branch/commit and preserved changes>
-Routing: <observed root, child model, metadata evidence or unverified>
+Routing: <root model as selected in the session; worker model_observed/base_url from .run.json or unverified>
 
 ## Accepted work and fixed contracts
 <Task IDs, decisions, actual integration status.>
 
 ## Active or unfinished work
-<Task IDs, worker thread IDs, file ownership, latest report and review state.>
+<Task IDs, worker session IDs, file ownership, latest report and review state.>
 
 ## Verification and blockers
 <What ran, what failed, what has not been verified, unresolved risks.>

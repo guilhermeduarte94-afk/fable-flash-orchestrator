@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.0 — Claude Code fork (2026-09-22)
+
+- Rebuilt for Claude Code: Claude Fable 5.1 orchestrates in the session,
+  DeepSeek (`deepseek-flash`, optionally `deepseek-v4-pro`) implements through
+  DeepSeek's Anthropic-compatible API.
+- Replaced Codex Router / custom-agent routing with `scripts/run_worker.py`,
+  which starts a headless `claude -p --bare` process with an isolated config
+  directory, the DeepSeek base URL and key, bounded tools, turn and budget
+  limits, and records `<report>.run.json` as routing evidence.
+- New `scripts/doctor.py` (CLI discovery, key presence, optional free catalog
+  check) and `scripts/worker_env.py`.
+- `install.py` now copies the skill to `~/.claude/skills/` with dry run, backup
+  and receipt; it never touches settings or credentials.
+- Plan manifests use `executor: fable | deepseek` and `max_deepseek_workers`.
+- Removed Codex-specific docs, policy block, release manifest and benchmark
+  claims from the original project.
+
+## Original project (astra-flash-orchestrator ≤ 1.2.0)
+
 ## Unreleased
 
 - Support explicit, reviewed DeepSeek V4.1 Flash routes through OpenRouter,

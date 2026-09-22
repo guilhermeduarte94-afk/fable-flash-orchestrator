@@ -1,7 +1,7 @@
 # <Task ID> implementation report
 STATUS: <ready_for_review | blocked | failed>
 Workspace/baseline: <actual path and baseline>
-Thread ID: <host-observed ID, if available>
+Session ID: <session_id from <report>.run.json>
 
 ## Changes
 <Changed paths and behavior; separate pre-existing changes.>
@@ -16,11 +16,11 @@ Thread ID: <host-observed ID, if available>
 <Completed internal steps, unfinished work, last failure, exact next action.>
 
 ---
-# Astra-only review record
+# Fable-only review record
 Spec compliance: <pass | changes requested | blocked, with evidence>
 Code quality/security: <pass | changes requested | blocked, with evidence>
 Independent verification: <actual commands or visual/runtime checks>
-Routing evidence: <host/router metadata, not a worker self-identification>
+Routing evidence: <model_observed/base_url from <report>.run.json, not a worker self-identification>
 Decision: <accepted | changes requested | blocked>
 Correction cycles: <count>
 Integration status: <what is present in the dependent workspace>
