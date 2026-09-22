@@ -90,6 +90,11 @@ python skill-path/scripts/run_worker.py --task-id T1 \
   [--model deepseek-flash|deepseek-v4-pro] [--max-turns N] [--max-budget-usd X] [--timeout S]
 ```
 
+Bound the run with `--max-turns` and `--timeout`. Avoid `--max-budget-usd` or set it
+high: the CLI prices the run at Anthropic list prices, roughly 20-50x DeepSeek's, and
+cache reads on a long bundle blow through a small cap mid-task (observed: a $3 cap
+stopped a worker at 51 turns with the code done and the report unwritten).
+
 Use a Bash timeout long enough for the whole bundle (up to the 600000 ms
 maximum) or `run_in_background` and wait for the completion notification. Do not
 poll the report file, read the stream log mid-run, or perform overlapping

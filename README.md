@@ -130,7 +130,8 @@ tests/                        offline suite (stub CLI, no network)
 
 - Role isolation, not a sandbox: the worker runs as you on your machine. Keep
   `.env` files and production credentials out of allowed paths.
-- `total_cost_usd` in `.run.json` is the CLI's estimate at Anthropic prices, not
-  your DeepSeek bill.
+- `total_cost_usd` in `.run.json` and the `--max-budget-usd` cap are the CLI's
+  estimate at Anthropic prices, roughly 20-50x DeepSeek's. Prefer `--max-turns`
+  and `--timeout` as limits.
 - Claude Code CLI flags change; `run_worker.py` is verified against 2.1.271.
 - Not affiliated with Anthropic or DeepSeek.

@@ -2,6 +2,10 @@
 
 ## 2.0.0 — Claude Code fork (2026-09-22)
 
+- Field-tested on a real repository (Roast Studio): one bundle, one correction
+  cycle resumed on the same session, accepted. Documented that the CLI's dollar
+  budget is priced at Anthropic rates and should not be used as the main cap.
+
 - Rebuilt for Claude Code: Claude Fable 5.1 orchestrates in the session,
   DeepSeek (`deepseek-flash`, optionally `deepseek-v4-pro`) implements through
   DeepSeek's Anthropic-compatible API.
