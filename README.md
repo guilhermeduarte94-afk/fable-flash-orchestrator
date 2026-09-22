@@ -74,8 +74,8 @@ no promise about a specific saving; measure with the DeepSeek usage dashboard.
 ## Install
 
 ```sh
-git clone https://github.com/ethanplusai/astra-flash-orchestrator.git
-cd astra-flash-orchestrator
+git clone https://github.com/guilhermeduarte94-afk/fable-flash-orchestrator.git
+cd fable-flash-orchestrator
 python -B install.py           # dry run: shows what would be written
 python -B install.py --apply   # copies the skill to ~/.claude/skills/fable-flash-orchestrator
 ```
